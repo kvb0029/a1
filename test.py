@@ -1,5 +1,21 @@
 import unittest
 from datetime import datetime, timedelta
+from auction_system import AuctionSystem
+import unittest
+from datetime import datetime, timedelta
+
+class TestAuctionSystem(unittest.TestCase):
+    def setUp(self):
+        """Set up an instance of AuctionSystem and a default user."""
+        self.auction_system = AuctionSystem()
+        self.auction_system.register_user("test_user", "password123")
+        self.auction_system.login_user("test_user", "password123")
+
+    # Your test cases here...
+
+if __name__ == "__main__":
+    unittest.main()
+
 
 class TestAuctionSystem(unittest.TestCase):
     def setUp(self):
