@@ -1,12 +1,8 @@
-import unittest
-from datetime import datetime, timedelta
 from auction_system import AuctionSystem
 import unittest
 from datetime import datetime, timedelta
-import unittest
-from datetime import datetime, timedelta
-from auction_system import AuctionSystem  # Ensure the AuctionSystem class is properly imported
-
+from unittest.mock import patch
+import io
 class TestAuctionSystem(unittest.TestCase):
     def setUp(self):
         """Set up an instance of AuctionSystem and register a default user."""
@@ -44,15 +40,19 @@ class TestAuctionSystem(unittest.TestCase):
         result = self.auction_system.place_bid("Laptop", 400.0)
         self.assertFalse(result)  # Assert that bid placement fails for low amount
 
+   
     def test_display_active_auctions(self):
         """Test displaying active auctions."""
         end_time = (datetime.now() + timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')
         self.auction_system.list_item("Laptop", "A high-end laptop", 500.0, end_time)
-        # Capture the output of active auctions display
-        with self.assertLogs() as captured:
+    
+        with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
             self.auction_system.display_active_auctions()
-        # Ensure that the listed item's details appear in the log
-        self.assertIn("Laptop", captured.output[0])
-
+            output = mock_stdout.getvalue()
+    
+        # Ensure that the listed item's details appear in the captured output
+        self.assertIn("Laptop", output)
+        self.assertIn("A high-end laptop", output)
+        self.assertIn("500.0", output)
 if __name__ == "__main__":
     unittest.main()
